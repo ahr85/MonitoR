@@ -1,0 +1,1 @@
+Rscript -e "library(knitr); library(markdown); knit('sample.Rmd'); markdownToHTML('sample.md', 'sample.html')"

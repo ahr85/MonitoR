@@ -1,0 +1,169 @@
+my Raspberry Pi Stats
+========================================================
+
+This is a sample document with some graphs about the usage of my Raspberry Pi. It's just for **testing** and there might be many more information to be shown. These are collected via the **cron.sh**.
+
+```{r data, echo=FALSE, message=FALSE}
+library(RSQLite)
+library(ggplot2)
+library(reshape)
+
+
+# db-Connection
+con <- dbConnect("SQLite", dbname = "data/data.db")
+
+
+### load data from yesterday ###
+
+# cron-time (minutes)
+ct <- 5
+
+# load data
+data_day <- dbGetQuery(con, "select * from data where date(date) == date('2013-03-17');")
+
+# RAM in Megabytes
+data_day$mem_tot <- round(data_day$mem_tot / 1024, digits = 1)
+data_day$mem_free <- round(data_day$mem_free / 1024, digits = 1)
+data_day$mem_buffers <- round(data_day$mem_buffers / 1024, digits = 1)
+data_day$mem_cached <- round(data_day$mem_cached / 1024, digits = 1)
+data_day$mem_div <- round(data_day$mem_div / 1024, digits = 1)
+
+# network activity in Kilobytes
+data_day$rx_kbytes <- round(data_day$rx_bytes / 1024)
+data_day$tx_kbytes <- round(data_day$tx_bytes / 1024)
+
+# calculate the network-activity between two timepoints
+# 32bit kernel still reset the counter to 0 if there are more than 4GB (4194304 KB) transferred, so we have to recalculate this
+data_day$diff_rx <- c(0,diff(data_day$rx_kbytes)) / (ct * 60)
+data_day$diff_tx <- c(0,diff(data_day$tx_kbytes)) / (ct * 60)
+
+for (i in 2:nrow(data_day)) {
+  if (data_day$diff_rx[i] < 0) { data_day$diff_rx[i] <- data_day$diff_rx[i] + (4*1024*1024 / (ct * 60)) }
+  if (data_day$diff_tx[i] < 0) { data_day$diff_tx[i] <- data_day$diff_tx[i] + (4*1024*1024 / (ct * 60)) }
+}
+
+# format date
+data_day$date <- as.POSIXlt(data_day$date, format = "%Y-%m-%d %H:%M:%S")
+
+
+### load data from last week ###
+
+# cron-time (minutes)
+ct <- 5
+
+# load data
+data_week <- dbGetQuery(con, "select * from data where date(date) > date('2013-03-10') and date(date) < date('2013-03-18');")
+
+# cron is done every 5 minutes.
+
+# RAM in Megabytes
+data_week$mem_tot <- round(data_week$mem_tot / 1024, digits = 1)
+data_week$mem_free <- round(data_week$mem_free / 1024, digits = 1)
+data_week$mem_buffers <- round(data_week$mem_buffers / 1024, digits = 1)
+data_week$mem_cached <- round(data_week$mem_cached / 1024, digits = 1)
+data_week$mem_div <- round(data_week$mem_div / 1024, digits = 1)
+
+# network activity in Kilobytes
+data_week$rx_kbytes <- round(data_week$rx_bytes / 1024)
+data_week$tx_kbytes <- round(data_week$tx_bytes / 1024)
+
+# calculate the network-activity between two timepoints
+# 32bit kernel still reset the counter to 0 if there are more than 4GB (4194304 KB) transferred, so we have to recalculate this
+data_week$diff_rx <- c(0,diff(data_week$rx_kbytes)) / (ct * 60)
+data_week$diff_tx <- c(0,diff(data_week$tx_kbytes)) / (ct * 60)
+
+for (i in 2:nrow(data_week)) {
+  if (data_week$diff_rx[i] < 0) { data_week$diff_rx[i] <- data_week$diff_rx[i] + (4*1024*1024 / (ct * 60)) }
+  if (data_week$diff_tx[i] < 0) { data_week$diff_tx[i] <- data_week$diff_tx[i] + (4*1024*1024 / (ct * 60)) }
+}
+
+# format date
+data_week$date <- as.POSIXlt(data_week$date, format = "%Y-%m-%d %H:%M:%S")
+
+```
+
+CPU load
+--------
+
+### Yesterday
+```{r cpu-daily, fig.width=10, echo = FALSE, warning=FALSE}
+temp_data <- melt(data_day[,c(1,2,3,4)], id=c("date"))
+
+load_plot <- ggplot(temp_data, aes(x = date, y = value, group = variable)) + geom_line(aes(colour = variable))
+load_plot
+
+```
+
+
+### Last week/seven days
+```{r cpu-weekly, fig.width=10, echo = FALSE, warning=FALSE}
+temp_data <- melt(data_week[,c(1,2,3,4)], id=c("date"))
+
+load_plot <- ggplot(temp_data, aes(x = date, y = value, group = variable)) + geom_line(aes(colour = variable))
+load_plot
+
+```
+
+
+Temperature
+-----------
+
+### Yesterday
+```{r temp-daily, fig.width=10, echo=FALSE, warning=FALSE}
+temp_plot <- ggplot(data_day, aes(x = date, y = temp, width = nrow(data_day)+20)) + geom_bar(stat = "identity")
+temp_plot
+```
+
+### Last Week
+```{r temp-weekly, fig.width=10, echo=FALSE, warning=FALSE}
+temp_plot <- ggplot(data_week, aes(x = date, y = temp, width = nrow(data_week)+1)) + geom_bar(stat = "identity")
+temp_plot
+```
+
+
+Memory Usage
+------------
+
+### Yesterday
+```{r mem-daily, fig.width=10, echo=FALSE, warning=FALSE}
+temp_data <- melt(data_day[,c(1,9,10,11,12)], id = c("date"))
+
+mem_plot <- ggplot(temp_data, aes(x = date, y = value, fill = variable, width = nrow(data_day)+20)) + geom_bar(stat = "identity")
+mem_plot
+```
+
+
+### Last week
+```{r mem-weekly, fig.width=10, echo=FALSE, warning=FALSE}
+temp_data <- melt(data_week[,c(1,9,10,11,12)], id = c("date"))
+
+mem_plot <- ggplot(temp_data, aes(x = date, y = value, fill = variable, width = nrow(data_week)+1)) + geom_bar(stat = "identity")
+mem_plot
+```
+
+
+Network
+-------
+
+As there is no high activity, I added _scale_y_sqrt()_.
+
+### Yesterday
+```{r net-daily, fig.width=10, echo= FALSE}
+temp_data <- melt(data_day[,c(1,15,16)], id=c("date"))
+
+net_plot <- ggplot(temp_data, aes(x = date, y = value, group = variable)) + geom_line(aes(colour = variable))
+net_plot <- net_plot + ylab("kbytes/s") + xlab("time") + scale_y_sqrt()
+net_plot
+
+```
+
+
+### last week
+```{r net-weekly, fig.width=10, echo= FALSE}
+temp_data <- melt(data_week[,c(1,15,16)], id=c("date"))
+
+net_plot <- ggplot(temp_data, aes(x = date, y = value, group = variable)) + geom_line(aes(colour = variable))
+net_plot <- net_plot + ylab("kbytes/s") + xlab("time") + scale_y_sqrt()
+net_plot
+
+```
