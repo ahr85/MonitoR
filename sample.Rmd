@@ -90,6 +90,7 @@ CPU load
 temp_data <- melt(data_day[,c(1,2,3,4)], id=c("date"))
 
 load_plot <- ggplot(temp_data, aes(x = date, y = value, group = variable)) + geom_line(aes(colour = variable))
+load_plot <- load_plot + ylab("Load") + xlab("Date") + scale_colour_discrete("Type of Load (min)", labels = c("Load 1", "Load 5", "Load 15"))
 load_plot
 
 ```
@@ -100,6 +101,7 @@ load_plot
 temp_data <- melt(data_week[,c(1,2,3,4)], id=c("date"))
 
 load_plot <- ggplot(temp_data, aes(x = date, y = value, group = variable)) + geom_line(aes(colour = variable))
+load_plot <- load_plot + ylab("Load") + xlab("Date") + scale_colour_discrete("Type of Load (min)", labels = c("Load 1", "Load 5", "Load 15"))
 load_plot
 
 ```
@@ -111,12 +113,14 @@ Temperature
 ### Yesterday
 ```{r temp-daily, fig.width=10, echo=FALSE, warning=FALSE}
 temp_plot <- ggplot(data_day, aes(x = date, y = temp, width = nrow(data_day)+20)) + geom_bar(stat = "identity")
+temp_plot <- temp_plot + ylab("Temperature (C)") + xlab("Date")
 temp_plot
 ```
 
 ### Last Week
 ```{r temp-weekly, fig.width=10, echo=FALSE, warning=FALSE}
 temp_plot <- ggplot(data_week, aes(x = date, y = temp, width = nrow(data_week)+1)) + geom_bar(stat = "identity")
+temp_plot <- temp_plot + ylab("Temperature (C)") + xlab("Date")
 temp_plot
 ```
 
@@ -129,6 +133,7 @@ Memory Usage
 temp_data <- melt(data_day[,c(1,9,10,11,12)], id = c("date"))
 
 mem_plot <- ggplot(temp_data, aes(x = date, y = value, fill = variable, width = nrow(data_day)+20)) + geom_bar(stat = "identity")
+mem_plot <- mem_plot + ylab("Memory") + xlab("Date") + scale_fill_discrete("Usage", labels=c("Free", "Buffers", "Cached", "Other"))
 mem_plot
 ```
 
@@ -138,6 +143,7 @@ mem_plot
 temp_data <- melt(data_week[,c(1,9,10,11,12)], id = c("date"))
 
 mem_plot <- ggplot(temp_data, aes(x = date, y = value, fill = variable, width = nrow(data_week)+1)) + geom_bar(stat = "identity")
+mem_plot <- mem_plot + ylab("Memory") + xlab("Date") + scale_fill_discrete("Usage", labels=c("Free", "Buffers", "Cached", "Other"))
 mem_plot
 ```
 
@@ -152,7 +158,9 @@ As there is no high activity, I added _scale_y_sqrt()_.
 temp_data <- melt(data_day[,c(1,15,16)], id=c("date"))
 
 net_plot <- ggplot(temp_data, aes(x = date, y = value, group = variable)) + geom_line(aes(colour = variable))
-net_plot <- net_plot + ylab("kbytes/s") + xlab("time") + scale_y_sqrt()
+net_plot <- net_plot + ylab("kbytes/s") + xlab("Date") + scale_colour_discrete("Type of Traffic", labels = c("Recieved", "Sent"))
+# remove if not needed
+net_plot <- net_plot + scale_y_sqrt()
 net_plot
 
 ```
@@ -163,7 +171,9 @@ net_plot
 temp_data <- melt(data_week[,c(1,15,16)], id=c("date"))
 
 net_plot <- ggplot(temp_data, aes(x = date, y = value, group = variable)) + geom_line(aes(colour = variable))
-net_plot <- net_plot + ylab("kbytes/s") + xlab("time") + scale_y_sqrt()
+net_plot <- net_plot + ylab("kbytes/s") + xlab("Date") + scale_colour_discrete("Type of Traffic", labels = c("Recieved", "Sent"))
+# remove if not needed
+net_plot <- net_plot + scale_y_sqrt()
 net_plot
 
 ```
