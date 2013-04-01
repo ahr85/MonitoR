@@ -1,7 +1,8 @@
 my Raspberry Pi Stats
 ========================================================
 
-This is a sample document with some graphs about the usage of my Raspberry Pi. It's just for **testing** and there might be many more information to be shown. These are collected via the **cron.sh**.
+This is a sample document with some graphs about the usage of my Raspberry Pi. It's just for **testing** and there might be many more information to be shown. These are collected via the **cron.sh**. The code is available at [github](https://github.com/ahs85/MonitoR).
+
 
 
 
@@ -14,7 +15,7 @@ CPU load
 
 
 
-### Last week/seven days
+### Last week
 ![plot of chunk cpu-weekly](figure/cpu-weekly.png) 
 
 
@@ -26,7 +27,7 @@ Temperature
 ![plot of chunk temp-daily](figure/temp-daily.png) 
 
 
-### Last Week
+### Last week
 ![plot of chunk temp-weekly](figure/temp-weekly.png) 
 
 
@@ -54,6 +55,6 @@ As there is no high activity, I added _scale_y_sqrt()_.
 
 
 
-### last week
+### Last week
 ![plot of chunk net-weekly](figure/net-weekly.png) 
 

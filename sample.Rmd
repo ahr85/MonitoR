@@ -1,7 +1,8 @@
 my Raspberry Pi Stats
 ========================================================
 
-This is a sample document with some graphs about the usage of my Raspberry Pi. It's just for **testing** and there might be many more information to be shown. These are collected via the **cron.sh**.
+This is a sample document with some graphs about the usage of my Raspberry Pi. It's just for **testing** and there might be many more information to be shown. These are collected via the **cron.sh**. The code is available at [github](https://github.com/ahs85/MonitoR).
+
 
 ```{r data, echo=FALSE, message=FALSE}
 library(RSQLite)
@@ -96,7 +97,7 @@ load_plot
 ```
 
 
-### Last week/seven days
+### Last week
 ```{r cpu-weekly, fig.width=10, echo = FALSE, warning=FALSE}
 temp_data <- melt(data_week[,c(1,2,3,4)], id=c("date"))
 
@@ -117,7 +118,7 @@ temp_plot <- temp_plot + ylab("Temperature (C)") + xlab("Date")
 temp_plot
 ```
 
-### Last Week
+### Last week
 ```{r temp-weekly, fig.width=10, echo=FALSE, warning=FALSE}
 temp_plot <- ggplot(data_week, aes(x = date, y = temp, width = nrow(data_week)+1)) + geom_bar(stat = "identity")
 temp_plot <- temp_plot + ylab("Temperature (C)") + xlab("Date")
@@ -166,7 +167,7 @@ net_plot
 ```
 
 
-### last week
+### Last week
 ```{r net-weekly, fig.width=10, echo= FALSE}
 temp_data <- melt(data_week[,c(1,15,16)], id=c("date"))
 
