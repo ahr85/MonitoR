@@ -5,18 +5,55 @@ This is a sample document with some graphs about the usage of my Raspberry Pi. I
 
 
 
+```
+## Error: Ersetzung hat 1 Zeile, Daten haben 0
+```
+
+```
+## Error: Ersetzung hat 1 Zeile, Daten haben 0
+```
+
+```
+## Error: Argument hat Länge 0
+```
+
+```
+## Error: 'origin' must be supplied
+```
+
+```
+## Error: Ersetzung hat 1 Zeile, Daten haben 0
+```
+
+```
+## Error: Ersetzung hat 1 Zeile, Daten haben 0
+```
+
+```
+## Error: Argument hat Länge 0
+```
+
+```
+## Error: 'origin' must be supplied
+```
 
 
 CPU load
 --------
 
 ### Yesterday
-![plot of chunk cpu-daily](figure/cpu-daily.png) 
+
+```
+## Error: Argument hat Länge 0
+```
 
 
 
 ### Last week
-![plot of chunk cpu-weekly](figure/cpu-weekly.png) 
+
+```
+## Error: Argument hat Länge 0
+```
 
 
 
@@ -24,11 +61,19 @@ Temperature
 -----------
 
 ### Yesterday
-![plot of chunk temp-daily](figure/temp-daily.png) 
+
+```
+## Error: Aesthetics must either be length one, or the same length as the
+## dataProblems:date, temp
+```
 
 
 ### Last week
-![plot of chunk temp-weekly](figure/temp-weekly.png) 
+
+```
+## Error: Aesthetics must either be length one, or the same length as the
+## dataProblems:date, temp
+```
 
 
 
@@ -36,12 +81,20 @@ Memory Usage
 ------------
 
 ### Yesterday
-![plot of chunk mem-daily](figure/mem-daily.png) 
+
+```
+## Error: Aesthetics must either be length one, or the same length as the
+## dataProblems:date, value, variable
+```
 
 
 
 ### Last week
-![plot of chunk mem-weekly](figure/mem-weekly.png) 
+
+```
+## Error: Aesthetics must either be length one, or the same length as the
+## dataProblems:date, value, variable
+```
 
 
 
@@ -51,10 +104,27 @@ Network
 As there is no high activity, I added _scale_y_sqrt()_.
 
 ### Yesterday
-![plot of chunk net-daily](figure/net-daily.png) 
+
+```
+## Error: undefined columns selected
+```
+
+```
+## Error: Argument hat Länge 0
+```
 
 
 
 ### Last week
-![plot of chunk net-weekly](figure/net-weekly.png) 
+
+```
+## Error: undefined columns selected
+```
+
+```
+## Error: Argument hat Länge 0
+```
+
+
+
 

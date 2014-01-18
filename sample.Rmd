@@ -7,11 +7,12 @@ This is a sample document with some graphs about the usage of my Raspberry Pi. I
 ```{r data, echo=FALSE, message=FALSE}
 library(RSQLite)
 library(ggplot2)
-library(reshape)
+library(reshape2)
 
 
 # db-Connection
-con <- dbConnect("SQLite", dbname = "data/data.db")
+driver <- dbDriver("SQLite")
+con <- dbConnect(driver, dbname = "data/data.db")
 
 
 ### load data from yesterday ###
@@ -20,6 +21,8 @@ con <- dbConnect("SQLite", dbname = "data/data.db")
 ct <- 5
 
 # load data
+
+
 data_day <- dbGetQuery(con, "select * from data where date(date) == date('2013-03-17');")
 
 # RAM in Megabytes
@@ -155,7 +158,7 @@ Network
 As there is no high activity, I added _scale_y_sqrt()_.
 
 ### Yesterday
-```{r net-daily, fig.width=10, echo= FALSE}
+```{r net-daily, fig.width=10, echo=FALSE}
 temp_data <- melt(data_day[,c(1,15,16)], id=c("date"))
 
 net_plot <- ggplot(temp_data, aes(x = date, y = value, group = variable)) + geom_line(aes(colour = variable))
@@ -168,7 +171,7 @@ net_plot
 
 
 ### Last week
-```{r net-weekly, fig.width=10, echo= FALSE}
+```{r net-weekly, fig.width=10, echo=FALSE}
 temp_data <- melt(data_week[,c(1,15,16)], id=c("date"))
 
 net_plot <- ggplot(temp_data, aes(x = date, y = value, group = variable)) + geom_line(aes(colour = variable))
@@ -177,4 +180,9 @@ net_plot <- net_plot + ylab("kbytes/s") + xlab("Date") + scale_colour_discrete("
 net_plot <- net_plot + scale_y_sqrt()
 net_plot
 
+```
+
+```{r unloading, echo=FALSE, eval=FALSE}
+dbDisconnect(con)
+dbUnloadDriver(driver)
 ```
