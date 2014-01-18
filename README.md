@@ -13,4 +13,7 @@ Referencing blog post: http://www.ahschulz.de/2013/04/01/monitor-using-r-for-ser
 MIT License. See LICENSE for details
 
 ## Copyright
-Copyright (c) 2013 Arne Hendrik Schulz
+Copyright (c) 2014 Arne Hendrik Schulz
+
+## Changes
+* 2014-01-18: Codes updated to use reshape2 instead of reshape
